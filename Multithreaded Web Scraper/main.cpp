@@ -1,18 +1,30 @@
 #include <iostream>
 #include <thread>
 
-class Work
+class Guard
 {
+private:
+	std::thread& thrd;
 public:
-	void operator()()
-	{
-		while (true) { std::cout << "I'm Working... \n"; }
+	explicit Guard(std::thread& thread) : thrd(thread) {}
+	~Guard() {
+		if (thrd.joinable())
+		{
+			thrd.join();
+			std::cout << "Thread Joined \n";
+		}
 	}
+	Guard(const Guard&) = delete;
+	Guard& operator = (const Guard&) = delete;
 };
+
+void Task()
+{
+	std::cout << "Task is running.... \n";
+}
 
 int main()
 {
-	Work work;
-	std::thread t([&] { work(); });
-	t.join();
+	std::thread t(Task);
+	Guard guard(t);
 }
