@@ -13,6 +13,6 @@ public:
 int main()
 {
 	Work work;
-	std::thread t(work);
+	std::thread t([&] { work(); });
 	t.join();
 }
