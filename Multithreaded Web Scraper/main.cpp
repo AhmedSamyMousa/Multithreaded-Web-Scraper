@@ -1,14 +1,18 @@
 #include <iostream>
 #include <thread>
 
-void Hello_World()
+class Work
 {
-	std::string name = "Ahmed";
-	std::cout << "Hello World, " << name;
-}
+public:
+	void operator()()
+	{
+		while (true) { std::cout << "I'm Working... \n"; }
+	}
+};
 
 int main()
 {
-	std::thread t(Hello_World); 
+	Work work;
+	std::thread t(work);
 	t.join();
 }
