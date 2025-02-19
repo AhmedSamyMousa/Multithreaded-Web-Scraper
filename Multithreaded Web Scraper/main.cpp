@@ -1,6 +1,13 @@
 #include <iostream>
 #include <thread>
 #include <mutex>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <curl/curl.h>
+#include <pugixml.hpp>
+
+std::mutex coutMutex;
 
 class Guard
 {
@@ -32,8 +39,6 @@ public:
 	Guard(const Guard&) = delete;
 	Guard& operator = (const Guard&) = delete;
 };
-
-std::mutex coutMutex;
 
 void Task(int id)
 {
