@@ -5,13 +5,23 @@ class Guard
 {
 private:
 	std::thread& thrd;
+	bool detachOnDestroy = false;
 public:
-	explicit Guard(std::thread& thread) : thrd(thread) {}
+	explicit Guard(std::thread& thread,bool detach = false) : thrd(thread),
+		detachOnDestroy(detach) {}
 	~Guard() {
 		if (thrd.joinable())
 		{
-			thrd.join();
-			std::cout << "Thread Joined \n";
+			if(!detachOnDestroy)
+			{
+				thrd.join();
+				std::cout << "Thread Joined \n";
+			}
+			else if(detachOnDestroy)
+			{
+				thrd.detach();
+				std::cout << "Thread Detached \n";
+			}
 		}
 	}
 	Guard(const Guard&) = delete;
