@@ -1,5 +1,6 @@
 #include <iostream>
 #include <thread>
+#include <mutex>
 
 class Guard
 {
@@ -32,8 +33,11 @@ public:
 	Guard& operator = (const Guard&) = delete;
 };
 
+std::mutex coutMutex;
+
 void Task(int id)
 {
+    std::lock_guard<std::mutex> lock(coutMutex);
 	std::cout << "Task "<<id<<" is running.... \n";
 }
 
@@ -43,5 +47,4 @@ int main()
 	std::thread t1(Task, 2);
 	Guard guard(t);
 	Guard guard1(t1);
-	std::this_thread::sleep_for(std::chrono::seconds(1));
 }
